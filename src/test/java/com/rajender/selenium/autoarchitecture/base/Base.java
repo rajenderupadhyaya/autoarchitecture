@@ -16,6 +16,8 @@ import org.aeonbits.owner.ConfigFactory;
 //Not Using Log4j
 //import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -23,6 +25,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -40,6 +43,7 @@ import com.rajender.selenium.autoarchitecture.testutils.EnvDevConfigProperty;
 import com.rajender.selenium.autoarchitecture.testutils.Extentmanager;
 import com.rajender.selenium.autoarchitecture.testutils.GeneralConfigProperty;
 import com.rajender.selenium.autoarchitecture.testutils.ObjectRepoConfigProperty;
+import com.rajender.selenium.autoarchitecture.testutils.TestUtil;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -100,7 +104,8 @@ public class Base {
 				//log.debug("Firefox Launched");
 			}else if(envDevConfigProperty.getBrowser().equals("chrome")){				
 				chromeOptions = new ChromeOptions();				
-				WebDriverManager.chromedriver().driverVersion("89.0.4389.23").setup();
+				//WebDriverManager.chromedriver().driverVersion("89.0.4389.23").setup();
+				WebDriverManager.chromedriver().driverVersion("91.0.4472.106").setup();
 				driver = new ChromeDriver(chromeOptions);
 				
 				//log.debug("Chrome Launched");
@@ -113,14 +118,17 @@ public class Base {
 			//	log.debug("Edge Launched");				
 			}			
 			
+			    // Archiving the previous test report if it exist
+			    TestUtil.archiveTestReport();
+			    
 			    // Extent Report
 				extentReport = Extentmanager.GetExtent(generalConfigProperty.getTestReportPath() + generalConfigProperty.getTestReportName());
 			    
-				driver.navigate().to(envDevConfigProperty.getTestsiteurl());
+				driver.navigate().to(envDevConfigProperty.getTestsiteurl());			
 			    driver.manage().window().maximize();
 			    driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
-			   
-			    webDriverWait = new WebDriverWait(driver, 5L);		 
+					   
+			    webDriverWait = new WebDriverWait(driver, 15L);		 
 		}			
 	}
 	
@@ -161,7 +169,9 @@ public class Base {
 	}
 	
 	/*
-	 * 	 To check element is present or not
+	 * 	 To check element is present or not.
+	 *   This method will return true even if element is hidden (i.e. invisible) but its present on page
+	 *   This method will return false if element is not present on page. 
 	 */
 	public static boolean isElementPresent(String xpath){			
 		try{			
@@ -174,7 +184,7 @@ public class Base {
 	}
 	
 	/*
-	 * Email captured Screen Shot	
+	 * Email captured Screen Shot. This will also generate screenshot in "screenshot" folder in project.	
 	 */
 	public void emailCaptureScreenShot(WebDriver webdriver) throws AddressException, IOException, MessagingException {		
 		
@@ -194,15 +204,44 @@ public class Base {
 		//eMail(generalConfigProperty.getSubject(),attachmentPath, generalConfigProperty.getMessageBodyTestNGReport(), generalConfigProperty.getAttachmentNameNG());
 	
         // Quit the browser
-      //  driver.quit();
+		quitBrowser();
 	}
 	
 	/*
-	 * Email any attachment
+	 *  Email any attachment
 	 */
 	public void eMail(String subject, String attachmentPath, String messageBody, String attachmentName) throws AddressException, MessagingException {		
 	
-	    mail.sendMail(generalConfigProperty.getServer(), generalConfigProperty.getFrom(), generalConfigProperty.getPassword(), generalConfigProperty.getTo(), subject, messageBody, attachmentPath, attachmentName);
+	  //  mail.sendMail(generalConfigProperty.getServer(), generalConfigProperty.getFrom(), generalConfigProperty.getPassword(), generalConfigProperty.getTo(), subject, messageBody, attachmentPath, attachmentName);
+	}
+	
+	/*
+	 *  Wait for page loading
+	 */
+	public static void waitForPageLoaded(WebDriver driver) {
+		ExpectedCondition<Boolean> expectation = new
+				ExpectedCondition<Boolean>() {
+					public Boolean apply(WebDriver driver) {
+						return (((JavascriptExecutor) driver).executeScript("return document.readyState").toString().equals("complete"));
+					    }
+				};
+		try {
+				WebDriverWait waitForLoad = new WebDriverWait(driver,5);
+				waitForLoad.until(expectation);				
+		} catch (TimeoutException toe) {
+			throw toe;			
+		}
+    } 
+	
+	private void quitBrowser() {
+		
+		// Quit the browser
+           driver.quit();
+	}
+	
+	public void assignAuthorTestCategory(String author, String testCategory ) {		
+		testLevelLog.get().assignAuthor(author);
+		testLevelLog.get().assignCategory(testCategory);		
 	}
 
 }

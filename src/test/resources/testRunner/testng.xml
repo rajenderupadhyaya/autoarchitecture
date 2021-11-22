@@ -5,19 +5,9 @@
 		<listener class-name="com.rajender.selenium.autoarchitecture.listeners.CustomListeners"></listener>
 		<listener class-name="com.rajender.selenium.autoarchitecture.listeners.RetryTransformer"></listener>
   </listeners>
-  <test name="Login Test">
+  <test name="EggTimer Test">
    <classes>
-      <class name="com.rajender.selenium.autoarchitecture.testcases.LoginTest"/>  
+      <class name="com.rajender.selenium.autoarchitecture.testcases.EggTimerTest"/>  
    </classes>
-  </test>
-  <test name="Profile Test">
-   <classes>
-      <class name="com.rajender.selenium.autoarchitecture.testcases.ProfileTest"/>  
-   </classes>
-  </test>
-  <test name="BookStore Test">
-   <classes>
-      <class name="com.rajender.selenium.autoarchitecture.testcases.BookStoreTest"/>  
-   </classes>
-  </test>
+  </test> 
 </suite> <!-- Suite -->

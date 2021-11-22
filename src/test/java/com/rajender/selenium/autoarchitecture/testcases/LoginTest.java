@@ -18,10 +18,9 @@ public class LoginTest extends Base {
 	private static final Logger log = LogManager.getLogger(LoginTest.class);
 	
 	@Test(dataProviderClass=DataProviderForTests.class, dataProvider="TestData", priority=0, enabled=true)
-	public void testLoginInvalidUser(Hashtable<String, String> data){
+	public void testLoginInvalidUser(Hashtable<String, String> data){		
 		
-		testLevelLog.get().assignAuthor("Rajender Upadhyaya");
-		testLevelLog.get().assignCategory("Regression");
+		assignAuthorTestCategory("Rajender Upadhyaya", "Regression");
 		
 		 log.info("Test Login Invalid User : testLoginInvalidUser method");
 		 //Instantiating Login page using initElements()
@@ -41,8 +40,7 @@ public class LoginTest extends Base {
 	@Test(dataProviderClass=DataProviderForTests.class, dataProvider="TestData", priority=1, enabled=true)
 	public void testLoginInvalidPwd(Hashtable<String, String> data){
 		
-		testLevelLog.get().assignAuthor("Rajender Upadhyaya");
-		testLevelLog.get().assignCategory("Regression");
+		 assignAuthorTestCategory("Rajender Upadhyaya", "Regression");
 		
 		 log.info("Test Login Invalid Password : testLoginInvalidPwd method");
 		//Instantiating Login page using initElements()
@@ -55,8 +53,7 @@ public class LoginTest extends Base {
 	@Test(dataProviderClass=DataProviderForTests.class, dataProvider="TestData", priority=2, enabled=true)
 	public void testLogin(Hashtable<String, String> data){
 		
-		testLevelLog.get().assignAuthor("Rajender Upadhyaya");
-		testLevelLog.get().assignCategory("Regression");
+		assignAuthorTestCategory("Rajender Upadhyaya", "Regression");
 		
 		log.info("Test Login : testLogin method");
 		//Instantiating Login page using initElements()

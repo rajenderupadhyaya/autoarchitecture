@@ -7,7 +7,7 @@ import org.testng.ITestResult;
 public class RetryListeners implements IRetryAnalyzer{
 	
 	int count=0;
-	int maxRetry=3; // Retry the failed method twice
+	int maxRetry=2; // Retry the failed method twice
 
 	public boolean retry(ITestResult arg0) {
 		if(count<maxRetry)

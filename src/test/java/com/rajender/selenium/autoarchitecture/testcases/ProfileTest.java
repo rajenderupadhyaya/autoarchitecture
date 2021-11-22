@@ -19,8 +19,8 @@ public class ProfileTest extends Base {
 	@Test(dataProviderClass=DataProviderForTests.class, dataProvider="TestData", priority=0, enabled=true)
 	public void testProfilePageElement(Hashtable<String, String> data){	 
 		
-		 testLevelLog.get().assignAuthor("Rajender Upadhyaya");
-		 testLevelLog.get().assignCategory("Regression");
+		 assignAuthorTestCategory("Krishna Chand", "Smoke");
+		 
 		 log.info("Test Profile Page Element : testProfilePageElement method");
 		 //Instantiating Profile page using initElements()
 		 ProfilePage profilePg = PageFactory.initElements(driver, ProfilePage.class);		 
